@@ -19,7 +19,7 @@ pip install -r requirements.txt
 This script will stream an audio file to the AssemblyAI WebSocket API. Transcripts will show up in the terminal as the file is uploaded.
 
 ```
-python stream_file.py <hostname of API, eg: websocket.assemblyai.com> /path/to/file.wav
+python stream_file.py websocket.assemblyai.com <your api token> /path/to/file.wav
 ```
 
 **Audio files must be in the following format:**

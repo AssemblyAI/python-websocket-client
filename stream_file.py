@@ -32,13 +32,10 @@ def print_transcript(ws, message):
 
     if data['msgId'] == prior_message_id:
         return
-    
+
     if data.get('status'):
-        if data['status'] in ['denied', 'rate_limited']:
-            sys.stdout.write("\r%s" % data['info'])
-            return
-        else:
-            return
+        print(data)
+        return
 
     print("\033c")
 
@@ -58,7 +55,7 @@ def print_transcript(ws, message):
 
 
 def send_file_over_ws(ws):
-    with open(sys.argv[2], 'rb') as _in:
+    with open(sys.argv[3], 'rb') as _in:
         data = _in.read()
 
     chunk_read_size = 2048
