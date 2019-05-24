@@ -32,6 +32,13 @@ def print_transcript(ws, message):
 
     if data['msgId'] == prior_message_id:
         return
+    
+    if data.get('status'):
+        if data['status'] in ['denied', 'rate_limited']:
+            sys.stdout.write("\r%s" % data['info'])
+            return
+        else:
+            return
 
     print("\033c")
 
@@ -62,7 +69,7 @@ def send_file_over_ws(ws):
     sec_per_chunk = ms_per_chunk / 1000.0
 
     def run():
-        f = open(sys.argv[2])
+        f = open(sys.argv[3])
         start = time.time()
         for chunk in read_file_in_chunks(f, chunk_size=chunk_read_size):
 
@@ -81,7 +88,7 @@ def send_file_over_ws(ws):
 
 
 websocket.enableTrace(True)
-ws = websocket.WebSocketApp("ws://%s/websocket" % sys.argv[1],
+ws = websocket.WebSocketApp("ws://%s/websocket?apiToken=%s" % (sys.argv[1], sys.argv[2]),
                             on_message=print_transcript,
                             on_error=on_error,
                             on_close=on_close)
