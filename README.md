@@ -46,7 +46,5 @@ Sample Encoding: 16-bit Signed Integer PCM
 This script will stream audio from your machine's microphone to the AssemblyAI WebSocket API. Transcripts will show up in the terminal as you speak. 
 
 ```
-python stream_mic.py <hostname of API, eg: websocket.assemblyai.com>
-```
-
-
+python stream_mic.py websocket.assemblyai.com <your api token>
+``` 

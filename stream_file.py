@@ -8,6 +8,7 @@ from client import on_error, on_close
 
 final_transcript = []
 prior_message_id = None
+AUTHENTICATED = False
 
 
 def read_file_in_chunks(file_object, chunk_size=2048):
@@ -28,15 +29,20 @@ def read_file_in_chunks(file_object, chunk_size=2048):
 
 def print_transcript(ws, message):
     global prior_message_id
-    data = json.loads(message)
+    global AUTHENTICATED
 
+    data = json.loads(message)
     if data['msgId'] == prior_message_id:
         return
 
     if data.get('status'):
         print(data)
-        return
 
+        if data['status'] == 'ready':
+            AUTHENTICATED = True
+
+        return
+    return
     print("\033c")
 
     if data['isFinal'] is True:
@@ -55,6 +61,8 @@ def print_transcript(ws, message):
 
 
 def send_file_over_ws(ws):
+    global AUTHENTICATED
+
     with open(sys.argv[3], 'rb') as _in:
         data = _in.read()
 
@@ -66,6 +74,9 @@ def send_file_over_ws(ws):
     sec_per_chunk = ms_per_chunk / 1000.0
 
     def run():
+        while AUTHENTICATED is False:
+            continue
+
         f = open(sys.argv[3])
         start = time.time()
         for chunk in read_file_in_chunks(f, chunk_size=chunk_read_size):
