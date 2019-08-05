@@ -19,6 +19,7 @@ def print_transcript(ws, message):
 
     if data.get('status'):
         print(data)
+        return
 
     print("\033c")
 
@@ -28,7 +29,6 @@ def print_transcript(ws, message):
         sys.stdout.write("\r%s" % print_text)
     else:
         final_words = ' '.join([w['text'] for w in data['words'] if w['intermed'] is False])
-
         intermed_words = ' '.join([w['text'] for w in data['words'] if w['intermed'] is True])
         partial_text = '\033[4m' + intermed_words + '\033[0m'
         print_text = ' '.join(final_transcript + [final_words, partial_text])
